@@ -8,6 +8,6 @@ set(LIBRARIES
         gtest
         pthread)
 
-set(SOURCE_FILES main.cpp CodeforcesWorldFinals.cpp main.cpp)
+set(SOURCE_FILES main.cpp Tic-tac-toe.cpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})

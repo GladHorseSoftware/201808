@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdio.h>
-#include "common.h"
+//#include "common.h"
 int r[12]={31,29,31,30,31,30,31,31,30,31,30,31};
 int p[12]={31,28,31,30,31,30,31,31,30,31,30,31};
 using namespace std;
@@ -9,13 +9,13 @@ using namespace std;
 //比较y/m/d 和by/bm/bd之间的时间是否超过18年。
 int f(int y, int m, int d, int by, int bm, int bd) {
     //判断by bm bd的合法性
-    if(y%4==0)
+    if(by%4==0)
     {
-        if (bd>r[m-1])//如果是闰年，天数小于本月天数。
+        if (bd>r[bm-1])//如果是闰年，天数小于本月天数。
             return 0;
     } else
     {
-        if (bd>p[m-1])//如果是平年，天数小于本月天数。
+        if (bd>p[bm-1])//如果是平年，天数小于本月天数。
             return 0;
     }
     if(bm>12) return 0;
@@ -59,7 +59,7 @@ int AgeIsOk(string finalDay, string birthDay)
  *
  * */
 #ifdef ENV_UNITTEST
-int CodeforcesWorldFinales()
+int CodeforcesWorldFinals()
 #else
 int main()
 #endif
@@ -78,24 +78,24 @@ int main()
 }
 
 #ifdef ENV_UNITTEST
-TEST(CodeforcesWorldFinales, test1)
+TEST(CodeforcesWorldFinals, test1)
 {
     EXPECT_EQ(1,AgeIsOk("01.01.98","01.01.80"));
 }
 
-TEST(tCodeforcesWorldFinales, test2)
+TEST(CodeforcesWorldFinals, test2)
 {
     EXPECT_EQ(0,AgeIsOk("20.10.20","10.02.30"));
 }
 
-TEST(tCodeforcesWorldFinales, test3)
+TEST(CodeforcesWorldFinals, test3)
 {
     EXPECT_EQ(0,AgeIsOk("28.02.74","28.02.64"));
 }
 /*
 01.03.19
 01.02.29*/
-TEST(tCodeforcesWorldFinales, test67)
+TEST(CodeforcesWorldFinals, test67)
 {
     EXPECT_EQ(0,AgeIsOk("01.03.19","01.02.29"));
 }
