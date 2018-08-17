@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include "common.h"
 
 using namespace std;
@@ -6,7 +6,7 @@ using namespace std;
 string tic_tac_toe(string a[3])
 {
     int i,j,s=0,x=0,o=0;
-    string result;
+
     for(i=0;i<3;i++)
     {
         //cout<<a[i]<<endl;
@@ -27,47 +27,50 @@ string tic_tac_toe(string a[3])
         return "illegal";
     }
     bool FirWon=false,SecWon=false;
-    for(i=0;i<3;i++)
-    {
-        if((a[i][0]==a[i][1]) && (a[i][1]==a[i][2]))
-        {
-            if (a[i][0]=='X') {
+
+    for(i=0;i<3;i++) {
+        //判断行是否有连成一排
+        if ((a[i][0] == a[i][1]) && (a[i][1] == a[i][2])) {
+            if (a[i][0] == 'X') {
                 //printf("%d\n",__LINE__);
                 FirWon = true;
             }
-            if (a[i][0]=='0') {
+            if (a[i][0] == '0') {
                 //printf("%d\n",__LINE__);
                 SecWon = true;
             }
         }
-        for(j=0;j<3;j++)
+    }
+    //判断列是否有连成一排
+    for(j=0;j<3;j++)
+    {
+        if((a[0][j]==a[1][j]) && (a[1][j]==a[2][j]))
         {
-            if((a[0][j]==a[1][j]) && (a[1][j]==a[2][j]))
-            {
-                if (a[0][j]=='X') {
-                    //printf("%d\n",__LINE__);
-                    FirWon = true;
-                }
-                if (a[0][j]=='0') {
-                    //printf("%d\n",__LINE__);
-                    SecWon = true;
-                }
+            if (a[0][j]=='X') {
+                //printf("%d\n",__LINE__);
+                FirWon = true;
+            }
+            if (a[0][j]=='0') {
+                //printf("%d\n",__LINE__);
+                SecWon = true;
             }
         }
     }
+
+    //判断对角线
     if((a[0][0]==a[1][1] && a[1][1]==a[2][2])||
        (a[0][2]==a[1][1] && a[1][1]==a[2][0]))
     {
-        if (a[1][1]='X') {
+        if (a[1][1]=='X') {
             //printf("%d\n",__LINE__);
             FirWon = true;
         }
-        if (a[1][1]='0') {
+        if (a[1][1]=='0') {
             //printf("%d\n",__LINE__);
             SecWon = true;
         }
     }
-
+    //不应该出现连个都赢
     if(FirWon&&SecWon)
     {
         //printf("Both win\n");
@@ -75,12 +78,16 @@ string tic_tac_toe(string a[3])
     }
     else
     {
-        if(FirWon&&SecWon==false)
+        if(FirWon && !SecWon)
         {
+            //如果x赢了但此时x个数和o相等
+            if (x-o<=0) return "illegal";
             return "the first player won";
         }
-        if(SecWon== true&&FirWon==false)
+        if(SecWon && !FirWon)
         {
+            //如果x比o多走一步，此时不应该出现o已经赢了
+            if (x-o>=1) return "illegal";
             return "the second player won";
         }
     }
@@ -92,7 +99,12 @@ string tic_tac_toe(string a[3])
     {
         return "first";
     }
+    //走完9宫格还没有人赢，则平局
+    if(x+o==9 && !FirWon && !SecWon) {
+        return "draw";
+    }
 }
+
 #ifdef ENV_UNITTEST
 int tic_tac_toe_main()
 #else
@@ -157,6 +169,7 @@ TEST(tic_tac_toe, test8)
     EXPECT_STREQ(tic_tac_toe(a).c_str(),"the first player won");
 }
 
+
 TEST(tic_tac_toe, test9)
 {
     string a[3]={
@@ -164,9 +177,38 @@ TEST(tic_tac_toe, test9)
             "X.X",
             "X.X"};
 
-    EXPECT_STREQ(tic_tac_toe(a).c_str(),"the second player won");
+    EXPECT_STREQ(tic_tac_toe(a).c_str(),"illegal");
 }
 
+TEST(tic_tac_toe, test10)
+{
+    string a[3]={
+            "XXX",
+            "0.0",
+            "0.."};
+
+    EXPECT_STREQ(tic_tac_toe(a).c_str(),"illegal");
+}
+
+TEST(tic_tac_toe, test11)
+{
+    string a[3]={
+            "X0X",
+            "0X0",
+            "X0X"};
+
+    EXPECT_STREQ(tic_tac_toe(a).c_str(),"the first player won");
+}
+
+TEST(tic_tac_toe, test120)
+{
+    string a[3]={
+            "X00",
+            "0XX",
+            "XX0"};
+
+    EXPECT_STREQ(tic_tac_toe(a).c_str(),"draw");
+}
 /*
 TEST(tic_tac_toe, testmain)
 {
